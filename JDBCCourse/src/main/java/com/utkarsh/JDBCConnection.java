@@ -43,8 +43,8 @@ public class JDBCConnection{
                 Statement st = con.createStatement();
 
                 // ================================================================================================================================================================================================================================
-                //Step5: CRUD OPERATIONS: We are going to update a record into the database and then retrieve it.
-                boolean status = st.execute("UPDATE student SET sname='Rahul' WHERE sid = 5");
+                //Step5: CRUD OPERATIONS: We are going to delete a record into the database and then retrieve it.
+                boolean status = st.execute("DELETE FROM student WHERE sname='Rahul' OR sid=5");
                 System.out.println(status);
                 /*Note: The execute method in JDBC returns a boolean:
                         true if the result is a ResultSet (e.g., for SELECT queries)
