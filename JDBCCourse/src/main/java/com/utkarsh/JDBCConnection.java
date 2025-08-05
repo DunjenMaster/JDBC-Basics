@@ -14,10 +14,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 import static java.lang.Class.forName;
 import static java.sql.DriverManager.getConnection;
@@ -32,6 +29,9 @@ public class JDBCConnection{
         public void connect()
         {
             try{
+                int sid = 101;
+                String sname = "Dave";
+                int marks = 50;
 
                 //Step3 - Create the Connection
                 Connection con = DriverManager.getConnection(dbProps.getUrl(), dbProps.getUserName(), dbProps.getPassword());
@@ -39,13 +39,19 @@ public class JDBCConnection{
 
                 // ================================================================================================================================================================================================================================
 
-                //Step4 - Create the statement : This is not needed for just establishing a connection, but is used when you want to execute SQL queries.
-                Statement st = con.createStatement();
+                //Step4 - Note: Instead of createStatement() method we will use the PreparedStatement interface to prevent SQL injection attacks and to handle dynamic queries more efficiently.
+                PreparedStatement st = con.prepareStatement("INSERT INTO student values (?, ?, ?)");
+                st.setInt(1,sid);
+                st.setString(2,sname);
+                st.setInt(3,marks);
+
+                st.execute();
+                System.out.println("Record inserted successfully!" + sid + " " + sname + " " + marks);
 
                 // ================================================================================================================================================================================================================================
                 //Step5: CRUD OPERATIONS: We are going to delete a record into the database and then retrieve it.
-                boolean status = st.execute("DELETE FROM student WHERE sname='Rahul' OR sid=5");
-                System.out.println(status);
+                //boolean status = st.execute("DELETE FROM student WHERE sname='Rahul' OR sid=5");
+                //System.out.println(status);
                 /*Note: The execute method in JDBC returns a boolean:
                         true if the result is a ResultSet (e.g., for SELECT queries)
                         false if the result is an update count or no result (e.g., for INSERT, UPDATE, DELETE)
